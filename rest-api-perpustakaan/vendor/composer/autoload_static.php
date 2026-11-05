@@ -29,6 +29,7 @@ class ComposerStaticInit31c6cb137f3d28e2f33b73b93a11c8ad
         'App\\Core\\Response' => __DIR__ . '/../..' . '/src/Core/Response.php',
         'App\\Core\\Router' => __DIR__ . '/../..' . '/src/Core/Router.php',
         'App\\Database\\Connection' => __DIR__ . '/../..' . '/src/Database/Connection.php',
+        'App\\Middleware\\AuthMiddleware' => __DIR__ . '/../..' . '/src/Middleware/AuthMiddleware.php',
         'App\\Models\\Book' => __DIR__ . '/../..' . '/src/Models/Book.php',
         'App\\Repositories\\MySQLBookRepository' => __DIR__ . '/../..' . '/src/Repositories/MySQLBookRepository.php',
         'App\\Services\\BookService' => __DIR__ . '/../..' . '/src/Services/BookService.php',

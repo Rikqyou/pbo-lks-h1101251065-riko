@@ -2,29 +2,35 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use App\Config\Env;
-use App\Contracts\BookRepositoryInterface;
-use App\Controllers\BookController;
-use App\Core\Container;
 use App\Core\Request;
+use App\Core\Response;
 use App\Core\Router;
-use App\Database\Connection;
+use App\Core\Container;
+use App\Controllers\BookController;
+use App\Middleware\AuthMiddleware;
+use App\Contracts\BookRepositoryInterface;
 use App\Repositories\MySQLBookRepository;
 
-Env::load(__DIR__ . '/../.env');
+if (file_exists(__DIR__ . '/../.env')) {
+    $lines = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) continue;
+        list($name, $value) = explode('=', $line, 2);
+        $_ENV[trim($name)] = trim($value);
+    }
+}
 
+$request = new Request();
 $container = new Container();
 
-$container->bind(BookRepositoryInterface::class, function () {
-    return new MySQLBookRepository(Connection::get());
-});
+// Register Dependency Injection Binding
+$container->bind(BookRepositoryInterface::class, MySQLBookRepository::class);
+
+// Proteksi Middleware Token
+$authMiddleware = new AuthMiddleware();
+$authMiddleware->handle($request);
 
 $router = new Router();
-
 $router->get('/api/books', [BookController::class, 'index']);
-$router->get('/api/books/{id}', [BookController::class, 'show']);
-$router->post('/api/books', [BookController::class, 'store']);
-$router->put('/api/books/{id}', [BookController::class, 'update']);
-$router->delete('/api/books/{id}', [BookController::class, 'destroy']);
 
-$router->dispatch(new Request(), $container);
+$router->dispatch($request, $container);

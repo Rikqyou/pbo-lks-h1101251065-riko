@@ -14,6 +14,7 @@ return array(
     'App\\Core\\Response' => $baseDir . '/src/Core/Response.php',
     'App\\Core\\Router' => $baseDir . '/src/Core/Router.php',
     'App\\Database\\Connection' => $baseDir . '/src/Database/Connection.php',
+    'App\\Middleware\\AuthMiddleware' => $baseDir . '/src/Middleware/AuthMiddleware.php',
     'App\\Models\\Book' => $baseDir . '/src/Models/Book.php',
     'App\\Repositories\\MySQLBookRepository' => $baseDir . '/src/Repositories/MySQLBookRepository.php',
     'App\\Services\\BookService' => $baseDir . '/src/Services/BookService.php',

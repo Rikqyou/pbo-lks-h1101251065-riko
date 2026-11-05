@@ -7,56 +7,37 @@ use App\Core\Response;
 
 class CategoryController
 {
-    private CategoryService $service;
+    private CategoryService $categoryService;
 
-    public function __construct(CategoryService $service)
+    public function __construct(CategoryService $categoryService)
     {
-        $this->service = $service;
+        $this->categoryService = $categoryService;
     }
 
     public function index(): void
     {
-        $categories = $this->service->getAllCategories();
-        
-        // Mengembalikan data array langsung
+        $categories = $this->categoryService->getAllCategories();
         Response::json([
             'success' => true,
-            'message' => 'Daftar kategori berhasil diambil',
+            'message' => 'Daftar kategori',
             'data'    => $categories
-        ], 200);
-    }
-
-    public function show(int $id): void
-    {
-        $category = $this->service->getCategoryById($id);
-        if (!$category) {
-            Response::json([
-                'success' => false,
-                'message' => 'Kategori tidak ditemukan'
-            ], 404);
-            return;
-        }
-
-        Response::json([
-            'success' => true,
-            'data'    => $category
         ], 200);
     }
 
     public function store(): void
     {
         $input = json_decode(file_get_contents('php://input'), true) ?? [];
-        
+
         if (empty($input['nama'])) {
             Response::json([
                 'success' => false,
-                'message' => 'Nama kategori wajib diisi'
-            ], 400);
+                'message' => 'Validasi gagal',
+                'errors'  => ['nama' => 'Nama kategori tidak boleh kosong']
+            ], 422);
             return;
         }
 
-        $category = $this->service->createCategory($input);
-
+        $category = $this->categoryService->createCategory($input);
         Response::json([
             'success' => true,
             'message' => 'Kategori berhasil ditambahkan',
@@ -67,37 +48,43 @@ class CategoryController
     public function update(int $id): void
     {
         $input = json_decode(file_get_contents('php://input'), true) ?? [];
-        $updated = $this->service->updateCategory($id, $input);
 
-        if (!$updated) {
+        if (empty($input['nama'])) {
             Response::json([
                 'success' => false,
-                'message' => 'Gagal memperbarui kategori atau kategori tidak ditemukan'
-            ], 400);
+                'message' => 'Validasi gagal',
+                'errors'  => ['nama' => 'Nama kategori tidak boleh kosong']
+            ], 422);
             return;
         }
 
-        Response::json([
-            'success' => true,
-            'message' => 'Kategori berhasil diperbarui'
-        ], 200);
+        $updated = $this->categoryService->updateCategory($id, $input);
+        if ($updated) {
+            Response::json([
+                'success' => true,
+                'message' => 'Kategori berhasil diperbarui'
+            ], 200);
+        } else {
+            Response::json([
+                'success' => false,
+                'message' => 'Kategori tidak ditemukan'
+            ], 404);
+        }
     }
 
     public function destroy(int $id): void
     {
-        $deleted = $this->service->deleteCategory($id);
-
-        if (!$deleted) {
+        $deleted = $this->categoryService->deleteCategory($id);
+        if ($deleted) {
+            Response::json([
+                'success' => true,
+                'message' => 'Kategori berhasil dihapus'
+            ], 200);
+        } else {
             Response::json([
                 'success' => false,
-                'message' => 'Gagal menghapus kategori atau kategori tidak ditemukan'
-            ], 400);
-            return;
+                'message' => 'Kategori tidak ditemukan'
+            ], 404);
         }
-
-        Response::json([
-            'success' => true,
-            'message' => 'Kategori berhasil dihapus'
-        ], 200);
     }
 }

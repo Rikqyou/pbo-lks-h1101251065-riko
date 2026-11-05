@@ -6,35 +6,35 @@ use App\Contracts\CategoryRepositoryInterface;
 
 class CategoryService
 {
-    private CategoryRepositoryInterface $repository;
+    private CategoryRepositoryInterface $categoryRepository;
 
-    public function __construct(CategoryRepositoryInterface $repository)
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
     {
-        $this->repository = $repository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     public function getAllCategories(): array
     {
-        return $this->repository->findAll();
+        return $this->categoryRepository->findAll();
     }
 
     public function getCategoryById(int $id): ?array
     {
-        return $this->repository->findById($id);
+        return $this->categoryRepository->findById($id);
     }
 
     public function createCategory(array $data): array
     {
-        return $this->repository->create($data);
+        return $this->categoryRepository->create($data);
     }
 
     public function updateCategory(int $id, array $data): bool
     {
-        return $this->repository->update($id, $data);
+        return $this->categoryRepository->update($id, $data);
     }
 
     public function deleteCategory(int $id): bool
     {
-        return $this->repository->delete($id);
+        return $this->categoryRepository->delete($id);
     }
 }

@@ -25,6 +25,10 @@ class BookService
 
     public function create(array $data): array
     {
+        if (empty($data['judul'])) {
+            throw new \Exception("Judul wajib diisi");
+        }
+
         return $this->repository->create($data);
     }
 

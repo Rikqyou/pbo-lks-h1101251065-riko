@@ -16,11 +16,20 @@ class BookController
         $this->bookService = $bookService;
     }
 
-    public function index(Request $request): void
+    public function index(?Request $request = null): void
     {
         $books = $this->bookService->list();
         Response::success($books, 'Daftar buku berhasil diambil');
     }
+
+   public function show(Request $request, int $id): void
+   {
+    $book = $this->bookService->getById($id);
+    if (!$book) {
+        Response::error("Buku dengan ID {$id} tidak ditemukan", 404);
+    }
+    Response::success($book, 'Detail buku berhasil diambil');
+   }
 
     public function store(Request $request): void
     {

@@ -6,57 +6,31 @@ class Router
 {
     private array $routes = [];
 
-    public function get(string $path, array $handler): void
+    public function add(string $method, string $path, array $handler): void
     {
-        $this->addRoute('GET', $path, $handler);
-    }
-
-    public function post(string $path, array $handler): void
-    {
-        $this->addRoute('POST', $path, $handler);
-    }
-
-    public function put(string $path, array $handler): void
-    {
-        $this->addRoute('PUT', $path, $handler);
-    }
-
-    public function delete(string $path, array $handler): void
-    {
-        $this->addRoute('DELETE', $path, $handler);
-    }
-
-    private function addRoute(string $method, string $path, array $handler): void
-    {
-        $regex = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([a-zA-Z0-9_]+)', $path);
-        $regex = '#^' . $regex . '$#';
-
         $this->routes[] = [
-            'method'  => $method,
+            'method'  => strtoupper($method),
             'path'    => $path,
-            'regex'   => $regex,
             'handler' => $handler
         ];
     }
 
-    public function dispatch(Request $request, Container $container): void
+    public function run(): void
     {
-        $method = $request->getMethod();
-        $uri    = $request->getUri();
+        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 
         foreach ($this->routes as $route) {
-            if ($route['method'] === $method && preg_match($route['regex'], $uri, $matches)) {
+            $pattern = "#^" . $route['path'] . "$#";
+
+            if ($route['method'] === $method && preg_match($pattern, $uri, $matches)) {
                 array_shift($matches);
-                [$controllerClass, $action] = $route['handler'];
-                $controller = $container->make($controllerClass);
-                call_user_func_array([$controller, $action], array_merge([$request], $matches));
+                call_user_func_array($route['handler'], $matches);
                 return;
             }
         }
 
-        Response::json([
-            'success' => false,
-            'message' => "Endpoint tidak ditemukan: {$uri}"
-        ], 404);
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Route tidak ditemukan']);
     }
 }

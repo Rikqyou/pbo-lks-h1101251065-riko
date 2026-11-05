@@ -11,18 +11,27 @@ class Request
 
     public function __construct()
     {
-        $this->method  = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $this->uri     = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-        $this->headers = getallheaders() ?: [];
+        $this->method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        
+        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $this->uri = strtok($uri, '?');
 
-        $rawInput = file_get_contents('php://input');
-        $json = json_decode($rawInput, true);
-
-        if (is_array($json)) {
-            $this->body = array_merge($_REQUEST, $json);
+        // Mengambil header dengan aman di mode CLI maupun Web Server
+        if (function_exists('getallheaders')) {
+            $this->headers = getallheaders() ?: [];
         } else {
-            $this->body = $_REQUEST;
+            $this->headers = [];
+            foreach ($_SERVER as $key => $value) {
+                if (str_starts_with($key, 'HTTP_')) {
+                    $header = str_replace(' ', '-', ucwords(str_replace('_', ' ', strtolower(substr($key, 5)))));
+                    $this->headers[$header] = $value;
+                }
+            }
         }
+
+        // Parsing body
+        $input = file_get_contents('php://input');
+        $this->body = json_decode($input, true) ?? $_POST ?? [];
     }
 
     public function getMethod(): string
@@ -38,17 +47,6 @@ class Request
     public function getHeaders(): array
     {
         return $this->headers;
-    }
-
-    public function getHeader(string $name): ?string
-    {
-        $nameLower = strtolower($name);
-        foreach ($this->headers as $key => $value) {
-            if (strtolower($key) === $nameLower) {
-                return $value;
-            }
-        }
-        return null;
     }
 
     public function getBody(): array

@@ -2,7 +2,6 @@
 
 namespace App\Core;
 
-use Exception;
 use ReflectionClass;
 
 class Container
@@ -36,11 +35,14 @@ class Container
             $type = $param->getType();
             if ($type && !$type->isBuiltin()) {
                 $dependencies[] = $this->make($type->getName());
-            } else {
-                throw new Exception("Tidak dapat menyelesaikannya parameter {$param->getName()}");
             }
         }
 
         return $reflector->newInstanceArgs($dependencies);
+    }
+
+    public function get(string $abstract)
+    {
+        return $this->make($abstract);
     }
 }

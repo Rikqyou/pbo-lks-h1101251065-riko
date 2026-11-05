@@ -19,11 +19,7 @@ class BookController
     public function index(Request $request): void
     {
         $books = $this->bookService->list();
-        Response::json([
-            'success' => true,
-            'message' => 'Daftar buku',
-            'data' => $books
-        ]);
+        Response::success($books, 'Daftar buku berhasil diambil');
     }
 
     public function store(Request $request): void
@@ -32,70 +28,52 @@ class BookController
         $validator = new Validator();
 
         $rules = [
-            'judul' => 'required',
+            'judul'   => 'required',
             'penulis' => 'required',
-            'tahun' => 'required|numeric',
-            'stok' => 'required|numeric'
+            'tahun'   => 'required|numeric',
+            'stok'    => 'required|numeric'
         ];
 
         if (!$validator->validate($data, $rules)) {
-            Response::json([
-                'success' => false,
-                'message' => 'Validasi gagal',
-                'errors' => $validator->getErrors()
-            ], 422);
+            Response::error('Validasi gagal', 422, $validator->getErrors());
         }
 
         $book = $this->bookService->create($data);
-        Response::json([
-            'success' => true,
-            'message' => 'Buku berhasil ditambahkan',
-            'data' => $book
-        ], 201);
+        Response::success($book, 'Buku berhasil ditambahkan', 201);
     }
 
     public function update(Request $request, int $id): void
     {
         $existing = $this->bookService->getById($id);
         if (!$existing) {
-            Response::json(['success' => false, 'message' => 'Buku tidak ditemukan'], 404);
+            Response::error('Buku tidak ditemukan', 404);
         }
 
         $data = $request->getBody();
         $validator = new Validator();
         $rules = [
-            'judul' => 'required',
+            'judul'   => 'required',
             'penulis' => 'required',
-            'tahun' => 'required|numeric',
-            'stok' => 'required|numeric'
+            'tahun'   => 'required|numeric',
+            'stok'    => 'required|numeric'
         ];
 
         if (!$validator->validate($data, $rules)) {
-            Response::json([
-                'success' => false,
-                'message' => 'Validasi gagal',
-                'errors' => $validator->getErrors()
-            ], 422);
+            Response::error('Validasi gagal', 422, $validator->getErrors());
         }
 
         $this->bookService->update($id, $data);
-        Response::json([
-            'success' => true,
-            'message' => 'Buku berhasil diperbarui'
-        ]);
+        Response::success(null, 'Buku berhasil diperbarui');
     }
 
     public function destroy(Request $request, int $id): void
     {
         $existing = $this->bookService->getById($id);
         if (!$existing) {
-            Response::json(['success' => false, 'message' => 'Buku tidak ditemukan'], 404);
+            Response::error('Buku tidak ditemukan', 404);
         }
 
         $this->bookService->delete($id);
-        Response::json([
-            'success' => true,
-            'message' => 'Buku berhasil dihapus'
-        ]);
+        Response::success(null, 'Buku berhasil dihapus');
     }
 }

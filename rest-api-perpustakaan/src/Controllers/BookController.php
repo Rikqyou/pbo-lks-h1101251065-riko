@@ -53,4 +53,49 @@ class BookController
             'data' => $book
         ], 201);
     }
+
+    public function update(Request $request, int $id): void
+    {
+        $existing = $this->bookService->getById($id);
+        if (!$existing) {
+            Response::json(['success' => false, 'message' => 'Buku tidak ditemukan'], 404);
+        }
+
+        $data = $request->getBody();
+        $validator = new Validator();
+        $rules = [
+            'judul' => 'required',
+            'penulis' => 'required',
+            'tahun' => 'required|numeric',
+            'stok' => 'required|numeric'
+        ];
+
+        if (!$validator->validate($data, $rules)) {
+            Response::json([
+                'success' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $validator->getErrors()
+            ], 422);
+        }
+
+        $this->bookService->update($id, $data);
+        Response::json([
+            'success' => true,
+            'message' => 'Buku berhasil diperbarui'
+        ]);
+    }
+
+    public function destroy(Request $request, int $id): void
+    {
+        $existing = $this->bookService->getById($id);
+        if (!$existing) {
+            Response::json(['success' => false, 'message' => 'Buku tidak ditemukan'], 404);
+        }
+
+        $this->bookService->delete($id);
+        Response::json([
+            'success' => true,
+            'message' => 'Buku berhasil dihapus'
+        ]);
+    }
 }

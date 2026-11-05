@@ -23,7 +23,6 @@ if (file_exists(__DIR__ . '/../.env')) {
 $request = new Request();
 $container = new Container();
 
-// Register PDO Instance ke Container
 $container->bind(\PDO::class, function() {
     $host = $_ENV['DB_HOST'] ?? '127.0.0.1';
     $db   = $_ENV['DB_DATABASE'] ?? 'perpustakaan';
@@ -38,15 +37,15 @@ $container->bind(\PDO::class, function() {
     ]);
 });
 
-// Register Repository Binding
 $container->bind(BookRepositoryInterface::class, MySQLBookRepository::class);
 
-// Proteksi Middleware Token
 $authMiddleware = new AuthMiddleware();
 $authMiddleware->handle($request);
 
 $router = new Router();
 $router->get('/api/books', [BookController::class, 'index']);
 $router->post('/api/books', [BookController::class, 'store']);
+$router->put('/api/books/{id}', [BookController::class, 'update']);
+$router->delete('/api/books/{id}', [BookController::class, 'destroy']);
 
 $router->dispatch($request, $container);

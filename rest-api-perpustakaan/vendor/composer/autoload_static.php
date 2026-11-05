@@ -21,20 +21,6 @@ class ComposerStaticInit31c6cb137f3d28e2f33b73b93a11c8ad
     );
 
     public static $classMap = array (
-        'App\\Config\\Env' => __DIR__ . '/../..' . '/src/Config/Env.php',
-        'App\\Contracts\\BookRepositoryInterface' => __DIR__ . '/../..' . '/src/Contracts/BookRepositoryInterface.php',
-        'App\\Controllers\\BookController' => __DIR__ . '/../..' . '/src/Controllers/BookController.php',
-        'App\\Core\\Container' => __DIR__ . '/../..' . '/src/Core/Container.php',
-        'App\\Core\\ExceptionHandler' => __DIR__ . '/../..' . '/src/Core/ExceptionHandler.php',
-        'App\\Core\\Request' => __DIR__ . '/../..' . '/src/Core/Request.php',
-        'App\\Core\\Response' => __DIR__ . '/../..' . '/src/Core/Response.php',
-        'App\\Core\\Router' => __DIR__ . '/../..' . '/src/Core/Router.php',
-        'App\\Core\\Validator' => __DIR__ . '/../..' . '/src/Core/Validator.php',
-        'App\\Database\\Connection' => __DIR__ . '/../..' . '/src/Database/Connection.php',
-        'App\\Middleware\\AuthMiddleware' => __DIR__ . '/../..' . '/src/Middleware/AuthMiddleware.php',
-        'App\\Models\\Book' => __DIR__ . '/../..' . '/src/Models/Book.php',
-        'App\\Repositories\\MySQLBookRepository' => __DIR__ . '/../..' . '/src/Repositories/MySQLBookRepository.php',
-        'App\\Services\\BookService' => __DIR__ . '/../..' . '/src/Services/BookService.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 

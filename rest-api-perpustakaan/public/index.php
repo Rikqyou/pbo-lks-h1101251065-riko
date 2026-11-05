@@ -11,6 +11,8 @@ use App\Controllers\BookController;
 use App\Middleware\AuthMiddleware;
 use App\Contracts\BookRepositoryInterface;
 use App\Repositories\MySQLBookRepository;
+use App\Contracts\CategoryRepositoryInterface;
+use App\Repositories\MySQLCategoryRepository;
 
 // Set Global Exception Handler
 set_exception_handler([ExceptionHandler::class, 'handle']);
@@ -52,4 +54,26 @@ $router->post('/api/books', [BookController::class, 'store']);
 $router->put('/api/books/{id}', [BookController::class, 'update']);
 $router->delete('/api/books/{id}', [BookController::class, 'destroy']);
 
+
+// Binding Container Kategori
+$container->bind(\App\Contracts\CategoryRepositoryInterface::class, function() use ($container) {
+    return new \App\Repositories\MySQLCategoryRepository($container->make(\PDO::class));
+});
+
+$container->bind(\App\Services\CategoryService::class, function() use ($container) {
+    return new \App\Services\CategoryService($container->make(\App\Contracts\CategoryRepositoryInterface::class));
+});
+
+$container->bind(\App\Controllers\CategoryController::class, function() use ($container) {
+    return new \App\Controllers\CategoryController($container->make(\App\Services\CategoryService::class));
+});
+
+// Route Kategori
+$router->get('/api/categories', [\App\Controllers\CategoryController::class, 'index']);
+$router->get('/api/categories/{id}', [\App\Controllers\CategoryController::class, 'show']);
+$router->post('/api/categories', [\App\Controllers\CategoryController::class, 'store']);
+$router->put('/api/categories/{id}', [\App\Controllers\CategoryController::class, 'update']);
+$router->delete('/api/categories/{id}', [\App\Controllers\CategoryController::class, 'destroy']);
+
+// Jalankan Router DI PALING BAWAH
 $router->dispatch($request, $container);

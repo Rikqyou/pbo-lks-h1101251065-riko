@@ -6,19 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'App\\Config\\Env' => $baseDir . '/src/Config/Env.php',
-    'App\\Contracts\\BookRepositoryInterface' => $baseDir . '/src/Contracts/BookRepositoryInterface.php',
-    'App\\Controllers\\BookController' => $baseDir . '/src/Controllers/BookController.php',
-    'App\\Core\\Container' => $baseDir . '/src/Core/Container.php',
-    'App\\Core\\ExceptionHandler' => $baseDir . '/src/Core/ExceptionHandler.php',
-    'App\\Core\\Request' => $baseDir . '/src/Core/Request.php',
-    'App\\Core\\Response' => $baseDir . '/src/Core/Response.php',
-    'App\\Core\\Router' => $baseDir . '/src/Core/Router.php',
-    'App\\Core\\Validator' => $baseDir . '/src/Core/Validator.php',
-    'App\\Database\\Connection' => $baseDir . '/src/Database/Connection.php',
-    'App\\Middleware\\AuthMiddleware' => $baseDir . '/src/Middleware/AuthMiddleware.php',
-    'App\\Models\\Book' => $baseDir . '/src/Models/Book.php',
-    'App\\Repositories\\MySQLBookRepository' => $baseDir . '/src/Repositories/MySQLBookRepository.php',
-    'App\\Services\\BookService' => $baseDir . '/src/Services/BookService.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
 );

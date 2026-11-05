@@ -13,6 +13,7 @@ return array(
     'App\\Core\\Request' => $baseDir . '/src/Core/Request.php',
     'App\\Core\\Response' => $baseDir . '/src/Core/Response.php',
     'App\\Core\\Router' => $baseDir . '/src/Core/Router.php',
+    'App\\Core\\Validator' => $baseDir . '/src/Core/Validator.php',
     'App\\Database\\Connection' => $baseDir . '/src/Database/Connection.php',
     'App\\Middleware\\AuthMiddleware' => $baseDir . '/src/Middleware/AuthMiddleware.php',
     'App\\Models\\Book' => $baseDir . '/src/Models/Book.php',

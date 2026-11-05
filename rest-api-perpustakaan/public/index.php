@@ -23,7 +23,22 @@ if (file_exists(__DIR__ . '/../.env')) {
 $request = new Request();
 $container = new Container();
 
-// Register Dependency Injection Binding
+// Register PDO Instance ke Container
+$container->bind(\PDO::class, function() {
+    $host = $_ENV['DB_HOST'] ?? '127.0.0.1';
+    $db   = $_ENV['DB_DATABASE'] ?? 'perpustakaan';
+    $user = $_ENV['DB_USERNAME'] ?? 'root';
+    $pass = $_ENV['DB_PASSWORD'] ?? '';
+    $charset = 'utf8mb4';
+
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    return new \PDO($dsn, $user, $pass, [
+        \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+        \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
+    ]);
+});
+
+// Register Repository Binding
 $container->bind(BookRepositoryInterface::class, MySQLBookRepository::class);
 
 // Proteksi Middleware Token
@@ -32,5 +47,6 @@ $authMiddleware->handle($request);
 
 $router = new Router();
 $router->get('/api/books', [BookController::class, 'index']);
+$router->post('/api/books', [BookController::class, 'store']);
 
 $router->dispatch($request, $container);

@@ -25,6 +25,7 @@ class ComposerStaticInit31c6cb137f3d28e2f33b73b93a11c8ad
         'App\\Contracts\\BookRepositoryInterface' => __DIR__ . '/../..' . '/src/Contracts/BookRepositoryInterface.php',
         'App\\Controllers\\BookController' => __DIR__ . '/../..' . '/src/Controllers/BookController.php',
         'App\\Core\\Container' => __DIR__ . '/../..' . '/src/Core/Container.php',
+        'App\\Core\\ExceptionHandler' => __DIR__ . '/../..' . '/src/Core/ExceptionHandler.php',
         'App\\Core\\Request' => __DIR__ . '/../..' . '/src/Core/Request.php',
         'App\\Core\\Response' => __DIR__ . '/../..' . '/src/Core/Response.php',
         'App\\Core\\Router' => __DIR__ . '/../..' . '/src/Core/Router.php',

@@ -10,6 +10,7 @@ return array(
     'App\\Contracts\\BookRepositoryInterface' => $baseDir . '/src/Contracts/BookRepositoryInterface.php',
     'App\\Controllers\\BookController' => $baseDir . '/src/Controllers/BookController.php',
     'App\\Core\\Container' => $baseDir . '/src/Core/Container.php',
+    'App\\Core\\ExceptionHandler' => $baseDir . '/src/Core/ExceptionHandler.php',
     'App\\Core\\Request' => $baseDir . '/src/Core/Request.php',
     'App\\Core\\Response' => $baseDir . '/src/Core/Response.php',
     'App\\Core\\Router' => $baseDir . '/src/Core/Router.php',
